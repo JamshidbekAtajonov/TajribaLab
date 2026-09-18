@@ -10,33 +10,66 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LaboratoriyalarRouteImport } from './routes/laboratoriyalar'
+import { Route as LaboratoriyalarIndexRouteImport } from './routes/laboratoriyalar.index'
+import { Route as TajribalarIdRouteImport } from './routes/tajribalar.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LaboratoriyalarRoute = LaboratoriyalarRouteImport.update({
+  id: '/laboratoriyalar',
+  path: '/laboratoriyalar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaboratoriyalarIndexRoute = LaboratoriyalarIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LaboratoriyalarRoute,
+} as any)
+const TajribalarIdRoute = TajribalarIdRouteImport.update({
+  id: '/tajribalar/$id',
+  path: '/tajribalar/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
+  '/tajribalar/$id': typeof TajribalarIdRoute
+  '/laboratoriyalar/': typeof LaboratoriyalarIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/tajribalar/$id': typeof TajribalarIdRoute
+  '/laboratoriyalar': typeof LaboratoriyalarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
+  '/tajribalar/$id': typeof TajribalarIdRoute
+  '/laboratoriyalar/': typeof LaboratoriyalarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/laboratoriyalar' | '/tajribalar/$id' | '/laboratoriyalar/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/tajribalar/$id' | '/laboratoriyalar'
+  id:
+    | '__root__'
+    | '/'
+    | '/laboratoriyalar'
+    | '/tajribalar/$id'
+    | '/laboratoriyalar/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LaboratoriyalarRoute: typeof LaboratoriyalarRouteWithChildren
+  TajribalarIdRoute: typeof TajribalarIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +81,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/laboratoriyalar': {
+      id: '/laboratoriyalar'
+      path: '/laboratoriyalar'
+      fullPath: '/laboratoriyalar'
+      preLoaderRoute: typeof LaboratoriyalarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/laboratoriyalar/': {
+      id: '/laboratoriyalar/'
+      path: '/'
+      fullPath: '/laboratoriyalar/'
+      preLoaderRoute: typeof LaboratoriyalarIndexRouteImport
+      parentRoute: typeof LaboratoriyalarRoute
+    }
+    '/tajribalar/$id': {
+      id: '/tajribalar/$id'
+      path: '/tajribalar/$id'
+      fullPath: '/tajribalar/$id'
+      preLoaderRoute: typeof TajribalarIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface LaboratoriyalarRouteChildren {
+  LaboratoriyalarIndexRoute: typeof LaboratoriyalarIndexRoute
+}
+
+const LaboratoriyalarRouteChildren: LaboratoriyalarRouteChildren = {
+  LaboratoriyalarIndexRoute: LaboratoriyalarIndexRoute,
+}
+
+const LaboratoriyalarRouteWithChildren = LaboratoriyalarRoute._addFileChildren(
+  LaboratoriyalarRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LaboratoriyalarRoute: LaboratoriyalarRouteWithChildren,
+  TajribalarIdRoute: TajribalarIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
