@@ -1,24 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Beaker, CheckCircle2, FlaskConical, Microscope, Play, Zap } from "lucide-react";
+import { SiteShell } from "@/components/site-shell";
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: [{ title: "TajribaLab — Virtual fan laboratoriyasi" }, { name: "description", content: "Kimyo, fizika va biologiyani o‘zbek tilida interaktiv 3D va 2D tajribalar orqali o‘rganing." }, { property: "og:title", content: "TajribaLab — Virtual fan laboratoriyasi" }, { property: "og:description", content: "Har bir o‘quvchiga tajriba qilish imkoniyati." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  return <SiteShell><main><section className="home-hero"><div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:py-20"><div><div className="hero-badge"><span/> O‘zbek tilidagi virtual laboratoriya</div><h1>Tajribani <em>o‘zingiz</em> bajaring.</h1><p>Jihozlar cheklangan bo‘lsa ham kimyo, fizika va biologiyani haqiqiy amallar, aniq o‘lchovlar va tushunarli izohlar bilan o‘rganing.</p><div className="mt-8 flex flex-wrap gap-3"><Link to="/tajribalar/$id" params={{id:"kislota-ishqor-titrlash"}} className="btn-primary btn-large"><Play size={18}/>Tajribani boshlash</Link><Link to="/laboratoriyalar" className="btn-secondary btn-large">Laboratoriyalar<ArrowRight size={18}/></Link></div><div className="hero-proof"><CheckCircle2 size={18}/><span>Ro‘yxatdan o‘tish shart emas</span><CheckCircle2 size={18}/><span>Natija qurilmada saqlanadi</span></div></div><div className="hero-lab" aria-label="Virtual kimyo laboratoriyasi tasviri"><div className="lab-window"><div/><div/><div/></div><div className="shelf"><span/><span/><span/></div><div className="hero-stand"><i/><b/></div><div className="hero-burette"><i/></div><div className="hero-flask"><span/></div><div className="hero-label"><small>Joriy tajriba</small><strong>Kislota–ishqor titrlash</strong><span><i/> 3D va 2D rejim</span></div></div></div></section><section className="subject-band"><div className="mx-auto max-w-7xl px-4 py-16 sm:px-6"><div className="section-heading"><div><p className="eyebrow">Uch fan · bitta platforma</p><h2 className="section-title large">Fanlarni tajriba orqali tushuning</h2></div><Link to="/laboratoriyalar" className="text-link">Barcha tajribalar <ArrowRight size={17}/></Link></div><div className="subject-grid"><Link to="/laboratoriyalar" className="subject-tile chemistry"><FlaskConical/><span><small>Kimyo</small><strong>Titrlash tajribasi tayyor</strong></span><ArrowRight/></Link><div className="subject-tile physics"><Zap/><span><small>Fizika</small><strong>Elektr zanjiri</strong></span><b>Tez kunda</b></div><div className="subject-tile biology"><Microscope/><span><small>Biologiya</small><strong>Mikroskop kuzatuvi</strong></span><b>Tez kunda</b></div></div></div></section><section className="how-band"><div className="mx-auto max-w-7xl px-4 py-16 sm:px-6"><p className="eyebrow">Qanday ishlaydi?</p><h2 className="section-title large">Ko‘rish emas — bajarish orqali o‘rganing</h2><div className="how-grid">{[["01","Tajribani tanlang","Maqsad, jihozlar va model chegaralarini oldindan biling."],["02","Amallarni bajaring","Asboblarni joylashtiring, suyuqlikni tomizing va qiymatlarni o‘lchang."],["03","Sababini tushuning","AI ustoz amalingiz natijaga qanday ta’sir qilganini izohlaydi."]].map(([n,t,d])=><article key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p></article>)}</div></div></section></main></SiteShell>;
 }
