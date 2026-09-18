@@ -22,7 +22,16 @@ Open `/sandbox` or use the **Erkin kimyo laboratoriyasi** card in the laboratory
 
 The current simulation covers water, hydrogen, bromine, iron, nine equipment forms, and one deliberately simplified iron–bromine demonstration when both materials are in a vessel heated to 80°C. It is educational software, not a quantitative chemistry model. Other periodic table tiles are reference placeholders.
 
-The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The app currently uses `localAIProvider`; a production provider should call a server endpoint that holds its API key in a server environment variable and receives only `buildExperimentContext(state)`, then returns a typed `AssistantReply`. No model key belongs in a `VITE_` variable or client bundle.
+The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The UI now uses `hybridAIProvider` (`src/lib/hybrid-ai-provider.ts`), which calls the real AI teacher through a Supabase Edge Function and transparently falls back to the rule-based `localAIProvider` if Supabase isn't connected yet or the request fails. No model key belongs in a `VITE_` variable or client bundle.
+
+### AI teacher (Supabase Edge Function)
+
+1. In the Lovable project settings, add the **Supabase** integration (one click). This creates `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` for the frontend automatically.
+2. Set the server-side secret: `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` (or via the Supabase dashboard → Edge Functions → Secrets). This key is only ever read inside the function, never sent to the browser.
+3. Deploy the function: `supabase functions deploy ai-teacher`.
+4. Copy `.env.example` to `.env.local` for local development and fill in the two `VITE_SUPABASE_*` values from the Supabase project settings.
+
+Until Supabase is connected, `supabase` in `src/lib/supabase-client.ts` is `null` and `hybridAIProvider` silently uses `localAIProvider`, so the sandbox keeps working with no configuration.
 
 Run `pnpm install`, `pnpm dev`, `node node_modules/typescript/bin/tsc --noEmit`, and `pnpm build`. Global `pnpm lint` currently fails on inherited Prettier formatting issues across the repository.
 
