@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LaboratoriyalarRouteImport } from './routes/laboratoriyalar'
 import { Route as NatijalarRouteImport } from './routes/natijalar'
+import { Route as OqituvchiRouteImport } from './routes/oqituvchi'
 import { Route as SandboxRouteImport } from './routes/sandbox'
+import { Route as SozlamalarRouteImport } from './routes/sozlamalar'
 import { Route as YordamRouteImport } from './routes/yordam'
 import { Route as LabIdRouteImport } from './routes/lab.$id'
 import { Route as LaboratoriyalarIndexRouteImport } from './routes/laboratoriyalar.index'
@@ -33,9 +35,19 @@ const NatijalarRoute = NatijalarRouteImport.update({
   path: '/natijalar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OqituvchiRoute = OqituvchiRouteImport.update({
+  id: '/oqituvchi',
+  path: '/oqituvchi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SandboxRoute = SandboxRouteImport.update({
   id: '/sandbox',
   path: '/sandbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SozlamalarRoute = SozlamalarRouteImport.update({
+  id: '/sozlamalar',
+  path: '/sozlamalar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const YordamRoute = YordamRouteImport.update({
@@ -63,7 +75,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -72,7 +86,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -83,7 +99,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -95,7 +113,9 @@ export interface FileRouteTypes {
     | '/'
     | '/laboratoriyalar'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -104,7 +124,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -114,7 +136,9 @@ export interface FileRouteTypes {
     | '/'
     | '/laboratoriyalar'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -125,7 +149,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LaboratoriyalarRoute: typeof LaboratoriyalarRouteWithChildren
   NatijalarRoute: typeof NatijalarRoute
+  OqituvchiRoute: typeof OqituvchiRoute
   SandboxRoute: typeof SandboxRoute
+  SozlamalarRoute: typeof SozlamalarRoute
   YordamRoute: typeof YordamRoute
   LabIdRoute: typeof LabIdRoute
   TajribalarIdRoute: typeof TajribalarIdRoute
@@ -154,11 +180,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NatijalarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oqituvchi': {
+      id: '/oqituvchi'
+      path: '/oqituvchi'
+      fullPath: '/oqituvchi'
+      preLoaderRoute: typeof OqituvchiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sandbox': {
       id: '/sandbox'
       path: '/sandbox'
       fullPath: '/sandbox'
       preLoaderRoute: typeof SandboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sozlamalar': {
+      id: '/sozlamalar'
+      path: '/sozlamalar'
+      fullPath: '/sozlamalar'
+      preLoaderRoute: typeof SozlamalarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/yordam': {
@@ -208,7 +248,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LaboratoriyalarRoute: LaboratoriyalarRouteWithChildren,
   NatijalarRoute: NatijalarRoute,
+  OqituvchiRoute: OqituvchiRoute,
   SandboxRoute: SandboxRoute,
+  SozlamalarRoute: SozlamalarRoute,
   YordamRoute: YordamRoute,
   LabIdRoute: LabIdRoute,
   TajribalarIdRoute: TajribalarIdRoute,

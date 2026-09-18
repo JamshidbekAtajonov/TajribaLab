@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { LabScene2D } from "@/components/lab-scene-2d";
 import { titrationSteps } from "@/lib/experiments";
 import { calculateTitration, initialTitrationState, STORAGE_KEY, type TitrationState } from "@/lib/titration";
+import { getGraphicsQuality } from "@/lib/preferences";
 const LabScene=lazy(()=>import("@/components/lab-scene").then(m=>({default:m.LabScene})));
 
 export const Route=createFileRoute("/lab/$id")({head:()=>({meta:[{title:"Titrash laboratoriyasi — TajribaLab"},{name:"description",content:"Kislota–ishqor titrlash bo‘yicha interaktiv 3D va 2D laboratoriya."},{property:"og:title",content:"Titrash laboratoriyasi — TajribaLab"},{property:"og:description",content:"Jihozlarni boshqaring, pH ni o‘lchang va natijani saqlang."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Lab});
 type Message={id:number;text:string};
 function Lab(){
  const [state,setState]=useState<TitrationState>(initialTitrationState); const [messages,setMessages]=useState<Message[]>([{id:0,text:"Assalomu alaykum! Avval kolbani byuretka ostiga joylashtiring. Men amallaringizni kuzatib, natija sababini tushuntiraman."}]); const [saved,setSaved]=useState(false); const [mobilePanel,setMobilePanel]=useState<"tools"|"teacher"|null>(null); const result=useMemo(()=>calculateTitration(state),[state]);
- useEffect(()=>{const raw=localStorage.getItem(STORAGE_KEY);if(raw)try{setState(JSON.parse(raw) as TitrationState)}catch{}},[]);
+ useEffect(()=>{const raw=localStorage.getItem(STORAGE_KEY);if(raw){try{setState(JSON.parse(raw) as TitrationState);return}catch{}}setState(s=>({...s,mode:getGraphicsQuality()==="light"?"2D":"3D"}))},[]);
  const update=(patch:Partial<TitrationState>,text:string)=>{setState(s=>({...s,...patch,updatedAt:new Date().toISOString()}));setMessages(m=>[...m,{id:Date.now(),text}]);setSaved(false)};
  const drop=(ml=.1)=>{if(!state.initialReadingRecorded)return setMessages(m=>[...m,{id:Date.now(),text:"Avval boshlang‘ich ko‘rsatkichni yozing — aks holda sarflangan hajmni aniq topib bo‘lmaydi."}]);if(!state.flaskPlaced)return setMessages(m=>[...m,{id:Date.now(),text:"Kolba byuretka ostida emas. Titrant kolbaga tushmaydi; avval uni joylashtiring."}]);if(state.baseInBuretteMl<=0)return setMessages(m=>[...m,{id:Date.now(),text:"Byuretka bo‘sh. Uni NaOH eritmasi bilan to‘ldiring."}]);const amount=Math.min(ml,state.baseInBuretteMl);const next={baseAddedMl:state.baseAddedMl+amount,baseInBuretteMl:state.baseInBuretteMl-amount,step:5};const nextResult=calculateTitration({...state,...next});update(next,`Siz ${amount.toFixed(1)} ml ishqor qo‘shdingiz. Jami ${next.baseAddedMl.toFixed(1)} ml titrant kislotani neytralladi; pH ${nextResult.ph.toFixed(2)} bo‘ldi.`)};
  useEffect(()=>{if(!state.valveOpen)return;const timer=setInterval(()=>drop(.2),500);return()=>clearInterval(timer)},[state.valveOpen,state.baseInBuretteMl,state.baseAddedMl,state.flaskPlaced,state.initialReadingRecorded]);
