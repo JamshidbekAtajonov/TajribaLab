@@ -1,8 +1,8 @@
 # TajribaLab P0
-- [ ] Design system and shared navigation
-- [ ] Home and three-subject catalogue
-- [ ] Titration information page
-- [ ] Interactive 2D/3D titration laboratory
-- [ ] Rule-based AI teacher and scientific model
-- [ ] Local saving, results, report and CSV
-- [ ] Responsive and interaction verification
+- [x] Design system and shared navigation
+- [x] Home and three-subject catalogue
+- [x] Titration information page
+- [x] Interactive 2D/3D titration laboratory
+- [x] Rule-based AI teacher and scientific model
+- [x] Local saving, results, report and CSV
+- [x] Responsive and interaction verification
