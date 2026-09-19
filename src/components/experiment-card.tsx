@@ -20,7 +20,9 @@ export function ExperimentCard({ experiment }: { experiment: Experiment }) {
       <div className="mt-5 flex items-center gap-4 border-t border-border pt-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1"><Clock size={15} />{experiment.duration}</span><span>{experiment.level}</span><span>{experiment.modes.join(" / ")}</span>
       </div>
-      {experiment.ready && <div className="mt-4 grid grid-cols-2 gap-2"><Link to="/tajribalar/$id" params={{ id: experiment.id }} className="btn-secondary">Batafsil</Link><Link to="/lab/$id" params={{ id: experiment.id }} className="btn-primary">Boshlash</Link></div>}
+      {experiment.ready && experiment.id === "kislota-ishqor-titrlash" && <div className="mt-4 grid grid-cols-2 gap-2"><Link to="/tajribalar/$id" params={{ id: experiment.id }} className="btn-secondary">Batafsil</Link><Link to="/lab/$id" params={{ id: experiment.id }} className="btn-primary">Boshlash</Link></div>}
+      {experiment.ready && experiment.id === "elektr-zanjiri" && <div className="mt-4"><Link to="/fizika-zanjiri" className="btn-primary w-full">Boshlash</Link></div>}
+      {experiment.ready && experiment.id === "mikroskop-kuzatuvi" && <div className="mt-4"><Link to="/mikroskop" className="btn-primary w-full">Boshlash</Link></div>}
     </article>
   );
 }

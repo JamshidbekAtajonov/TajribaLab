@@ -22,7 +22,38 @@ Open `/sandbox` or use the **Erkin kimyo laboratoriyasi** card in the laboratory
 
 The current simulation covers water, hydrogen, bromine, iron, nine equipment forms, and one deliberately simplified iron–bromine demonstration when both materials are in a vessel heated to 80°C. It is educational software, not a quantitative chemistry model. Other periodic table tiles are reference placeholders.
 
-The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The app currently uses `localAIProvider`; a production provider should call a server endpoint that holds its API key in a server environment variable and receives only `buildExperimentContext(state)`, then returns a typed `AssistantReply`. No model key belongs in a `VITE_` variable or client bundle.
+The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The UI uses `hybridAIProvider` (`src/lib/hybrid-ai-provider.ts`), which calls the real AI teacher and transparently falls back to the rule-based `localAIProvider` if the server isn't configured yet or the request fails. No model key belongs in a `VITE_` variable or client bundle — no third-party backend (Supabase or otherwise) is used at all.
+
+### AI teacher (server function, no external backend)
+
+Both AI teachers — the sandbox's (`src/lib/remote-ai-provider.ts`) and the titration lab's (`src/lib/titration-ai.ts`) — call the same `askAiTeacher` in `src/lib/ai-teacher-client.ts`. That file defines a TanStack Start `createServerFn`, which runs **only** on the server that already hosts this app (no separate service to deploy); calling it from a component transparently performs the RPC. Each lab sends its own `context` JSON (`buildExperimentContext()` / `buildTitrationContext()`) describing only what actually exists in that simulation, so the model never invents equipment or reactions the lab doesn't have. It calls Claude (`claude-haiku-4-5-20251001` — a small, cheap model is enough for this scoped Q&A) via the Anthropic API, reading the key from `process.env.ANTHROPIC_API_KEY` on the server.
+
+**Local development** — the dev server (`pnpm dev`) reads real process environment variables, so set it in your shell before starting it:
+
+```sh
+# macOS/Linux
+export ANTHROPIC_API_KEY=sk-ant-...
+pnpm dev
+```
+
+```powershell
+# Windows PowerShell
+$env:ANTHROPIC_API_KEY = "sk-ant-..."
+pnpm dev
+```
+
+(`.dev.vars.example` documents the variable name; copy it to `.dev.vars` as a reminder if you use `wrangler dev` instead — `.dev.vars` is git-ignored either way.)
+
+**Production** — this app builds to a Cloudflare Worker (`pnpm build` generates `.output/server/wrangler.json`, auto-named from this repo). Set the secret on that worker with the Cloudflare CLI:
+
+```sh
+npx wrangler login
+npx wrangler secret put ANTHROPIC_API_KEY
+```
+
+Run this from wherever your deploy already points `wrangler` at the built worker (or set the same key/value under the worker's **Settings → Variables and Secrets** in the Cloudflare dashboard, which persists across redeploys). No Supabase project, no Lovable integration, and no other backend is needed — this repo's own server is the whole backend.
+
+Until Supabase is connected, `supabase` in `src/lib/supabase-client.ts` is `null` and both hybrid providers silently use their local rule-based fallback, so both labs keep working with no configuration.
 
 Run `pnpm install`, `pnpm dev`, `node node_modules/typescript/bin/tsc --noEmit`, and `pnpm build`. Global `pnpm lint` currently fails on inherited Prettier formatting issues across the repository.
 
