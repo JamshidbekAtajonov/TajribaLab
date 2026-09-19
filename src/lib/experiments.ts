@@ -32,7 +32,7 @@ export const experiments: Experiment[] = [
     level: "O‘rta",
     duration: "20 daqiqa",
     modes: ["3D", "2D"],
-    ready: false,
+    ready: true,
     description: "Kuchlanish, tok va qarshilik orasidagi bog‘lanishni tekshiring.",
   },
   {
@@ -43,7 +43,7 @@ export const experiments: Experiment[] = [
     level: "Boshlang‘ich",
     duration: "15–20 daqiqa",
     modes: ["3D", "2D"],
-    ready: false,
+    ready: true,
     description: "Preparatni joylashtirib, fokus va kattalashtirishni boshqaring.",
   },
 ];

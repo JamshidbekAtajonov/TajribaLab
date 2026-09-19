@@ -21,6 +21,9 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Local Claude Code tooling (dev server launch config, machine-specific paths)
+/.claude/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
