@@ -2,8 +2,7 @@
 
 O'zbek tilidagi virtual laboratoriya platformasi. O'quvchilar kimyo, fizika va biologiya tajribalarini haqiqiy fizika/kimyo/biologiya qoidalariga asoslangan interaktiv 3D va 2D simulyatsiyalar orqali, ro'yxatdan o'tmasdan va real jihozlarsiz bajarishlari mumkin.
 
-**Live demo**: https://flawless-digital-art.lovable.app
-
+**Live demo**: https://tajriba-lab.vercel.app
 ## Bu loyiha qanday qurilgan
 
 Loyihaning boshlang'ich interfeys dizayni va skeleti [Lovable](https://lovable.dev) platformasida yaratilgan. Undan keyingi barcha funksionallik — laboratoriya simulyatsiyalari, hisoblash mantiqlari, AI ustoz integratsiyasi, animatsiyalar, o'zbek tiliga to'liq tarjima va boshqa hamma narsa — **Claude (Anthropic)** tomonidan, Claude Code orqali to'g'ridan-to'g'ri ushbu repozitoriyda yozilgan.
