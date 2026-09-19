@@ -14,7 +14,9 @@ import { Route as FizikaZanjiriRouteImport } from './routes/fizika-zanjiri'
 import { Route as LaboratoriyalarRouteImport } from './routes/laboratoriyalar'
 import { Route as MikroskopRouteImport } from './routes/mikroskop'
 import { Route as NatijalarRouteImport } from './routes/natijalar'
+import { Route as OqituvchiRouteImport } from './routes/oqituvchi'
 import { Route as SandboxRouteImport } from './routes/sandbox'
+import { Route as SozlamalarRouteImport } from './routes/sozlamalar'
 import { Route as YordamRouteImport } from './routes/yordam'
 import { Route as LabIdRouteImport } from './routes/lab.$id'
 import { Route as LaboratoriyalarIndexRouteImport } from './routes/laboratoriyalar.index'
@@ -45,9 +47,19 @@ const NatijalarRoute = NatijalarRouteImport.update({
   path: '/natijalar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OqituvchiRoute = OqituvchiRouteImport.update({
+  id: '/oqituvchi',
+  path: '/oqituvchi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SandboxRoute = SandboxRouteImport.update({
   id: '/sandbox',
   path: '/sandbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SozlamalarRoute = SozlamalarRouteImport.update({
+  id: '/sozlamalar',
+  path: '/sozlamalar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const YordamRoute = YordamRouteImport.update({
@@ -77,7 +89,9 @@ export interface FileRoutesByFullPath {
   '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
   '/mikroskop': typeof MikroskopRoute
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -88,7 +102,9 @@ export interface FileRoutesByTo {
   '/fizika-zanjiri': typeof FizikaZanjiriRoute
   '/mikroskop': typeof MikroskopRoute
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -101,7 +117,9 @@ export interface FileRoutesById {
   '/laboratoriyalar': typeof LaboratoriyalarRouteWithChildren
   '/mikroskop': typeof MikroskopRoute
   '/natijalar': typeof NatijalarRoute
+  '/oqituvchi': typeof OqituvchiRoute
   '/sandbox': typeof SandboxRoute
+  '/sozlamalar': typeof SozlamalarRoute
   '/yordam': typeof YordamRoute
   '/lab/$id': typeof LabIdRoute
   '/tajribalar/$id': typeof TajribalarIdRoute
@@ -115,7 +133,9 @@ export interface FileRouteTypes {
     | '/laboratoriyalar'
     | '/mikroskop'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -126,7 +146,9 @@ export interface FileRouteTypes {
     | '/fizika-zanjiri'
     | '/mikroskop'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -138,7 +160,9 @@ export interface FileRouteTypes {
     | '/laboratoriyalar'
     | '/mikroskop'
     | '/natijalar'
+    | '/oqituvchi'
     | '/sandbox'
+    | '/sozlamalar'
     | '/yordam'
     | '/lab/$id'
     | '/tajribalar/$id'
@@ -151,7 +175,9 @@ export interface RootRouteChildren {
   LaboratoriyalarRoute: typeof LaboratoriyalarRouteWithChildren
   MikroskopRoute: typeof MikroskopRoute
   NatijalarRoute: typeof NatijalarRoute
+  OqituvchiRoute: typeof OqituvchiRoute
   SandboxRoute: typeof SandboxRoute
+  SozlamalarRoute: typeof SozlamalarRoute
   YordamRoute: typeof YordamRoute
   LabIdRoute: typeof LabIdRoute
   TajribalarIdRoute: typeof TajribalarIdRoute
@@ -194,11 +220,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NatijalarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oqituvchi': {
+      id: '/oqituvchi'
+      path: '/oqituvchi'
+      fullPath: '/oqituvchi'
+      preLoaderRoute: typeof OqituvchiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sandbox': {
       id: '/sandbox'
       path: '/sandbox'
       fullPath: '/sandbox'
       preLoaderRoute: typeof SandboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sozlamalar': {
+      id: '/sozlamalar'
+      path: '/sozlamalar'
+      fullPath: '/sozlamalar'
+      preLoaderRoute: typeof SozlamalarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/yordam': {
@@ -250,7 +290,9 @@ const rootRouteChildren: RootRouteChildren = {
   LaboratoriyalarRoute: LaboratoriyalarRouteWithChildren,
   MikroskopRoute: MikroskopRoute,
   NatijalarRoute: NatijalarRoute,
+  OqituvchiRoute: OqituvchiRoute,
   SandboxRoute: SandboxRoute,
+  SozlamalarRoute: SozlamalarRoute,
   YordamRoute: YordamRoute,
   LabIdRoute: LabIdRoute,
   TajribalarIdRoute: TajribalarIdRoute,
