@@ -21,9 +21,6 @@ dist-ssr
 .wrangler/
 .dev.vars
 
-# Supabase CLI local metadata
-supabase/.temp/
-
 # Local Claude Code tooling (dev server launch config, machine-specific paths)
 /.claude/
 
