@@ -1,34 +1,60 @@
-# Creative Interface Design
+# TajribaLab — Virtual fan laboratoriyasi
 
-Sen professional dizaynersan va web developer va dasturchisan, bizning websiteimiz ushbu funksiyalardan iborat, menga shu saytning interfeysi kerak, xatosiz va mukammal qil
+O'zbek tilidagi virtual laboratoriya platformasi. O'quvchilar kimyo, fizika va biologiya tajribalarini haqiqiy fizika/kimyo/biologiya qoidalariga asoslangan interaktiv 3D va 2D simulyatsiyalar orqali, ro'yxatdan o'tmasdan va real jihozlarsiz bajarishlari mumkin.
 
-This project was built with [Lovable](https://lovable.dev).
+**Live demo**: https://flawless-digital-art.lovable.app
 
-**Live app**: https://flawless-digital-art.lovable.app
+## Bu loyiha qanday qurilgan
 
-## Build with Lovable
+Loyihaning boshlang'ich interfeys dizayni va skeleti [Lovable](https://lovable.dev) platformasida yaratilgan. Undan keyingi barcha funksionallik — laboratoriya simulyatsiyalari, hisoblash mantiqlari, AI ustoz integratsiyasi, animatsiyalar, o'zbek tiliga to'liq tarjima va boshqa hamma narsa — **Claude (Anthropic)** tomonidan, Claude Code orqali to'g'ridan-to'g'ri ushbu repozitoriyda yozilgan.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/1c6b00c8-92a3-4851-9077-5aade66b81ee).
+## Nima qila oladi
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- **Kimyo — kislota-ishqor titrlash**: byuretka, kolba va indikator bilan haqiqiy titrlash jarayoni; pH qiymati kislota/ishqor mol balansidan real formula orqali hisoblanadi (taxminiy son emas).
+- **Kimyo — erkin laboratoriya (sandbox)**: suv, vodorod, brom va temir bilan erkin tajriba; 9 xil jihoz, temir+brom reaksiyasi 80°C dan yuqorida haqiqiy modellashtirilgan.
+- **Fizika — oddiy elektr zanjiri**: manba, ampermetr, rezistor va voltmetrni simlar bilan ulab, Om qonuni (I = U/R) asosida real hisoblangan tok va kuchlanishni kuzatish; noto'g'ri ulanish (ampermetr ketma-ket emas, qisqa tutashuv) aniq xato bilan ko'rsatiladi.
+- **Biologiya — mikroskop kuzatuvi**: ikkita tayyor preparat (piyoz pardasi, elodeya bargi), 10x/40x obyektiv, fokus va yorug'lik boshqaruvi; kattalashtirish oshganda hech qanday yangi (to'qib chiqarilgan) tafsilot qo'shilmaydi — faqat mavjud tasvir kattalashadi.
+- **AI ustoz**: barcha to'rtta laboratoriyada ham har bir tajriba o'z real holatini AI'ga yuboradi, shuning uchun javoblar shu tajribada haqiqatan mavjud bo'lgan narsalarga asoslanadi. Server ishlamasa yoki sozlanmagan bo'lsa, avtomatik ravishda qoidaviy (rule-based) lokal javobga tushadi — tajriba hech qachon to'xtab qolmaydi.
+- **Natijalar**: tajriba tarixi, CSV eksport, brauzer orqali PDF chop etish, kuzatuv/xulosa yozish — hammasi qurilmada (localStorage) saqlanadi, hisob yaratish shart emas.
+- **PWA**: sayt telefon/kompyuterga "ilova" sifatida o'rnatiladi (manifest + service worker), Android uchun APK sifatida ham o'rash mumkin.
 
-## Development
+## Texnologiyalar
 
-## 3D laboratory sandbox
+**Frontend**
+- [React 19](https://react.dev) + [TanStack Start](https://tanstack.com/start) (SSR, fayl asosidagi routing, server funksiyalari)
+- [TanStack Router](https://tanstack.com/router) va [TanStack Query](https://tanstack.com/query)
+- [TypeScript](https://www.typescriptlang.org) (qat'iy `strict` sozlamalar bilan)
+- [Vite](https://vite.dev) — build vositasi
+- [Tailwind CSS 4](https://tailwindcss.com) + [Radix UI](https://www.radix-ui.com) primitivlari (shadcn/ui uslubida)
+- [Zod](https://zod.dev) — sxema validatsiyasi (URL qidiruv parametrlari va h.k.)
+- [Recharts](https://recharts.org) — I–U grafigi va boshqa diagrammalar
+- [Lucide](https://lucide.dev) — ikonalar
 
-Open `/sandbox` or use the **Erkin kimyo laboratoriyasi** card in the laboratory catalog. The freeform lab runs entirely in the browser and needs no API key. Add equipment and materials from the drawer, drag objects on the bench, select a vessel, and transfer a source into it from the inspector. The timeline records simulation events; the right panel uses a local, rule based assistant grounded in those events and current contents.
+**3D/2D grafika**
+- [Three.js](https://threejs.org), [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) va [drei](https://github.com/pmndrs/drei) — barcha 3D laboratoriya sahnalari (kolba, zanjir jihozlari, mikroskop korpusi)
+- Xom SVG — 2D sxemalar (titrlash qurilmasi, elektr zanjiri taxtasi, mikroskop okulyar ko'rinishi)
 
-The current simulation covers water, hydrogen, bromine, iron, nine equipment forms, and one deliberately simplified iron–bromine demonstration when both materials are in a vessel heated to 80°C. It is educational software, not a quantitative chemistry model. Other periodic table tiles are reference placeholders.
+**AI**
+- [Anthropic Claude API](https://www.anthropic.com) (`claude-haiku-4-5`) — AI ustoz uchun, TanStack Start server funksiyasi orqali chaqiriladi. API kalit hech qachon brauzerga chiqmaydi.
 
-The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The UI uses `hybridAIProvider` (`src/lib/hybrid-ai-provider.ts`), which calls the real AI teacher and transparently falls back to the rule-based `localAIProvider` if the server isn't configured yet or the request fails. No model key belongs in a `VITE_` variable or client bundle — no third-party backend (Supabase or otherwise) is used at all.
+**Backend / infratuzilma**
+- Alohida backend yo'q — [Cloudflare Workers](https://workers.cloudflare.com) ustida ishlaydigan TanStack Start serveri o'zi backend vazifasini bajaradi ([Nitro](https://nitro.build) orqali)
+- [pnpm](https://pnpm.io) — paket menejeri
 
-### AI teacher (server function, no external backend)
+## Rivojlantirish
 
-Both AI teachers — the sandbox's (`src/lib/remote-ai-provider.ts`) and the titration lab's (`src/lib/titration-ai.ts`) — call the same `askAiTeacher` in `src/lib/ai-teacher-client.ts`. That file defines a TanStack Start `createServerFn`, which runs **only** on the server that already hosts this app (no separate service to deploy); calling it from a component transparently performs the RPC. Each lab sends its own `context` JSON (`buildExperimentContext()` / `buildTitrationContext()`) describing only what actually exists in that simulation, so the model never invents equipment or reactions the lab doesn't have. It calls Claude (`claude-haiku-4-5-20251001` — a small, cheap model is enough for this scoped Q&A) via the Anthropic API, reading the key from `process.env.ANTHROPIC_API_KEY` on the server.
+```sh
+pnpm install
+pnpm dev
+node node_modules/typescript/bin/tsc --noEmit
+pnpm build
+```
 
-**Local development** — the dev server (`pnpm dev`) reads real process environment variables, so set it in your shell before starting it:
+Node.js kerak — [nvm orqali o'rnatish](https://github.com/nvm-sh/nvm#installing-and-updating).
+
+### AI ustoz uchun kalit sozlash
+
+**Lokal ishlash uchun** (`pnpm dev` haqiqiy process environment o'zgaruvchilarini o'qiydi):
 
 ```sh
 # macOS/Linux
@@ -42,26 +68,15 @@ $env:ANTHROPIC_API_KEY = "sk-ant-..."
 pnpm dev
 ```
 
-(`.dev.vars.example` documents the variable name; copy it to `.dev.vars` as a reminder if you use `wrangler dev` instead — `.dev.vars` is git-ignored either way.)
+(`.dev.vars.example` o'zgaruvchi nomini ko'rsatadi; `wrangler dev` ishlatsangiz uni `.dev.vars`ga nusxalang — bu fayl har doim `.gitignore`da.)
 
-**Production** — this app builds to a Cloudflare Worker (`pnpm build` generates `.output/server/wrangler.json`, auto-named from this repo). Set the secret on that worker with the Cloudflare CLI:
+**Production uchun** (bu ilova Cloudflare Worker sifatida quriladi — `pnpm build` `.output/server/wrangler.json` yaratadi):
 
 ```sh
 npx wrangler login
 npx wrangler secret put ANTHROPIC_API_KEY
 ```
 
-Run this from wherever your deploy already points `wrangler` at the built worker (or set the same key/value under the worker's **Settings → Variables and Secrets** in the Cloudflare dashboard, which persists across redeploys). No Supabase project, no Lovable integration, and no other backend is needed — this repo's own server is the whole backend.
+Yoki Cloudflare dashboard'da worker'ning **Settings → Variables and Secrets** bo'limida qo'ying. Kalit qo'yilmagan bo'lsa ham sayt ishlayveradi — AI ustoz avtomatik lokal qoidaviy javobga tushadi.
 
-Until Supabase is connected, `supabase` in `src/lib/supabase-client.ts` is `null` and both hybrid providers silently use their local rule-based fallback, so both labs keep working with no configuration.
-
-Run `pnpm install`, `pnpm dev`, `node node_modules/typescript/bin/tsc --noEmit`, and `pnpm build`. Global `pnpm lint` currently fails on inherited Prettier formatting issues across the repository.
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+Global `pnpm lint` hozircha repo bo'ylab meros bo'lib qolgan Prettier formatlash xatolari sababli muvaffaqiyatsiz tugaydi.
