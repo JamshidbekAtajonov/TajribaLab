@@ -79,4 +79,22 @@ npx wrangler secret put ANTHROPIC_API_KEY
 
 Yoki Cloudflare dashboard'da worker'ning **Settings → Variables and Secrets** bo'limida qo'ying. Kalit qo'yilmagan bo'lsa ham sayt ishlayveradi — AI ustoz avtomatik lokal qoidaviy javobga tushadi.
 
+## Vercel'ga deploy qilish
+
+Ilova [Nitro](https://nitro.build) orqali quriladi, shuning uchun bir xil kod bazasi bir nechta platformaga (shu jumladan Vercel'ga) mos keladi — kod o'zgartirish shart emas, faqat build vaqtidagi bitta muhit o'zgaruvchisi kifoya.
+
+1. [vercel.com](https://vercel.com) da **Add New → Project** orqali shu GitHub repozitoriyasini import qiling.
+2. Loyiha **Environment Variables** bo'limida ikkitasini qo'shing:
+   - `NITRO_PRESET` = `vercel` (build'ni Cloudflare o'rniga Vercel uchun moslashtiradi)
+   - `ANTHROPIC_API_KEY` = sizning Anthropic API kalitingiz (AI ustoz uchun; qo'ymasangiz ham sayt lokal qoidaviy javob bilan ishlayveradi)
+3. **Deploy** tugmasini bosing. `vercel.json` va `pnpm build` qolganini o'zi bajaradi (`.vercel/output` — Vercel'ning "Build Output API" formatida).
+
+Terminal orqali deploy qilish uchun:
+
+```sh
+npm i -g vercel
+vercel login
+vercel --prod
+```
+
 Global `pnpm lint` hozircha repo bo'ylab meros bo'lib qolgan Prettier formatlash xatolari sababli muvaffaqiyatsiz tugaydi.
