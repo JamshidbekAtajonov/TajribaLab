@@ -1,7 +1,7 @@
 import { supabase } from './supabase-client';
 import { remoteAIProvider } from './remote-ai-provider';
 import { localAIProvider } from './sandbox-ai';
-import type { AIProvider, AssistantReply } from './sandbox-ai';
+import type { AIProvider, AssistantReply, HistoryTurn } from './sandbox-ai';
 import type { LabState } from './sandbox';
 
 export type AISource = 'remote' | 'local';
@@ -14,10 +14,10 @@ export const getLastAISource = () => lastSource;
 // cold start, etc). This satisfies the "AI service drops -> experiment continues"
 // requirement without ever blocking the student on a network error.
 export const hybridAIProvider: AIProvider = {
-  async sendMessage(question: string, state: LabState): Promise<AssistantReply> {
+  async sendMessage(question: string, state: LabState, history: HistoryTurn[] = []): Promise<AssistantReply> {
     if (supabase) {
       try {
-        const reply = await remoteAIProvider.sendMessage(question, state);
+        const reply = await remoteAIProvider.sendMessage(question, state, history);
         lastSource = 'remote';
         return reply;
       } catch (error) {

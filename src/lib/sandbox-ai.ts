@@ -1,6 +1,7 @@
 import { buildExperimentContext, type LabEvent, type LabState } from './sandbox';
 export type AssistantReply = { kind: 'Observed' | 'Inferred' | 'Predicted'; text: string };
-export interface AIProvider { sendMessage(question: string, state: LabState): Promise<AssistantReply> }
+export type HistoryTurn = { role: 'user' | 'assistant'; text: string };
+export interface AIProvider { sendMessage(question: string, state: LabState, history?: HistoryTurn[]): Promise<AssistantReply> }
 export const localAIProvider: AIProvider = { async sendMessage(question, state) {
   const context = buildExperimentContext(state); const q = question.toLowerCase(); const latest = context.recentEvents.at(-1);
   if (/what.*(inside|contain)|ichida/.test(q)) { const vessels = context.objects.filter(x=>x.contents.length); return {kind:'Observed',text:vessels.length?vessels.map(x=>`${x.name}: ${x.contents.map(c=>`${c.quantity} ${c.unit} ${c.material}`).join(', ')}`).join(' · '):'No vessel contains a substance yet.'}; }

@@ -27,7 +27,7 @@ The assistant contract is `AIProvider` in `src/lib/sandbox-ai.ts`. The UI now us
 ### AI teacher (Supabase Edge Function)
 
 1. In the Lovable project settings, add the **Supabase** integration (one click). This creates `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` for the frontend automatically.
-2. Set the server-side secret: `supabase secrets set ANTHROPIC_API_KEY=sk-ant-...` (or via the Supabase dashboard → Edge Functions → Secrets). This key is only ever read inside the function, never sent to the browser.
+2. Set the server-side secret: `supabase secrets set OPENAI_API_KEY=sk-...` (or via the Supabase dashboard → Edge Functions → Secrets). This key is only ever read inside the function, never sent to the browser.
 3. Deploy the function: `supabase functions deploy ai-teacher`.
 4. Copy `.env.example` to `.env.local` for local development and fill in the two `VITE_SUPABASE_*` values from the Supabase project settings.
 
