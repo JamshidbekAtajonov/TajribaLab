@@ -1,6 +1,6 @@
 import { buildExperimentContext, type LabEvent, type LabState } from './sandbox';
-export type AssistantReply = { kind: 'Observed' | 'Inferred' | 'Predicted'; text: string };
-export type HistoryTurn = { role: 'user' | 'assistant'; text: string };
+export type { AssistantReply, HistoryTurn } from './ai-teacher-client';
+import type { AssistantReply, HistoryTurn } from './ai-teacher-client';
 export interface AIProvider { sendMessage(question: string, state: LabState, history?: HistoryTurn[]): Promise<AssistantReply> }
 export const localAIProvider: AIProvider = { async sendMessage(question, state) {
   const context = buildExperimentContext(state); const q = question.toLowerCase(); const latest = context.recentEvents.at(-1);

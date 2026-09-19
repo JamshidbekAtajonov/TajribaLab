@@ -1,19 +1,11 @@
-import { supabase } from './supabase-client';
 import { buildExperimentContext, type LabState } from './sandbox';
+import { askAiTeacher } from './ai-teacher-client';
 import type { AIProvider, AssistantReply, HistoryTurn } from './sandbox-ai';
 
-// Calls the `ai-teacher` Supabase Edge Function, which holds the OpenAI API key server-side.
+// Calls the shared `ai-teacher` Supabase Edge Function with the sandbox's own
+// context shape (buildExperimentContext).
 export const remoteAIProvider: AIProvider = {
   async sendMessage(question, state: LabState, history: HistoryTurn[] = []): Promise<AssistantReply> {
-    if (!supabase) throw new Error('Supabase is not connected — add the Supabase integration in Lovable first.');
-
-    const context = buildExperimentContext(state);
-    const { data, error } = await supabase.functions.invoke<AssistantReply>('ai-teacher', {
-      body: { question, context, history },
-    });
-
-    if (error) throw error;
-    if (!data || !data.text) throw new Error('Empty response from ai-teacher function');
-    return data;
+    return askAiTeacher(question, buildExperimentContext(state), history);
   },
 };

@@ -65,3 +65,39 @@ export function calculateTitration(state: TitrationState): TitrationResult {
 }
 
 export const STORAGE_KEY = "tajribalab-titration-v1";
+
+export function buildTitrationContext(state: TitrationState, result: TitrationResult) {
+  return {
+    experiment: "Kislota–ishqor titrlash",
+    notes: "Model 25°C dagi 0,1 M atrofidagi kuchli bir asosli kislota (HCl) va kuchli ishqor (NaOH) mol balansidan pH ni hisoblaydi. Faqat shu ikki modda va shu formula modellashtirilgan — boshqa reagent yoki reaksiya bu tajribada mavjud emas.",
+    step: state.step,
+    stepDescription: titrationStepDescriptionForContext(state.step),
+    flaskPlaced: state.flaskPlaced,
+    acidMl: state.acidMl,
+    acidMolarity: state.acidMolarity,
+    baseMolarity: state.baseMolarity,
+    baseInBuretteMl: state.baseInBuretteMl,
+    baseAddedMl: state.baseAddedMl,
+    indicatorAdded: state.indicatorAdded,
+    initialReadingRecorded: state.initialReadingRecorded,
+    finalReadingRecorded: state.finalReadingRecorded,
+    valveOpen: state.valveOpen,
+    mixed: state.mixed,
+    observations: state.observations,
+    result,
+  };
+}
+
+function titrationStepDescriptionForContext(step: number): string {
+  const labels = [
+    "Maqsad va model shartlari o‘qilmoqda",
+    "Kolba byuretka ostiga joylashtirilmoqda",
+    "HCl eritmasi kolbaga o‘tkazilmoqda",
+    "Fenolftalein indikatori qo‘shilmoqda",
+    "Byuretka NaOH bilan to‘ldirilib, boshlang‘ich o‘qish yozilmoqda",
+    "NaOH asta tomizilmoqda",
+    "Yakuniy o‘qish yozilmoqda",
+    "Natija va xulosa saqlanmoqda",
+  ];
+  return labels[step] ?? "Noma’lum bosqich";
+}
